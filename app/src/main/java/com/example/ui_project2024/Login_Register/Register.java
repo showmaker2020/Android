@@ -3,6 +3,7 @@ package com.example.ui_project2024.Login_Register;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.text.BoringLayout;
 import android.text.InputType;
 import android.util.Log;
@@ -18,6 +19,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.ui_project2024.DB_Manager.Database;
 import com.example.ui_project2024.DB_Manager.Mydatabase_Login_register;
 import com.example.ui_project2024.R;
 import com.example.ui_project2024.databinding.ActivityLogInBinding;
@@ -26,6 +28,7 @@ import com.example.ui_project2024.databinding.ActivityRegisterBinding;
 public class Register extends AppCompatActivity {
     ActivityRegisterBinding binding;
     Mydatabase_Login_register db;
+    Database database;
     private boolean passshow = false;
     private boolean passconfirmShow = false;
     EditText emailEt, passEt, passEtConfirm, fullnameEt, mobliePhone;
@@ -85,38 +88,35 @@ public class Register extends AppCompatActivity {
                 String confirmPassword = binding.passEtConfirm.getText().toString();
                 String phone = binding.mobliePhone.getText().toString();
                 String name = binding.fullnameEt.getText().toString();
-                Intent i = new Intent(Register.this, otp.class);
-//                if(email.equals("")||password.equals("")||confirmPassword.equals("")||name.equals("")){
-//                    Log.d("aaa", "onClick: Enter full fields!!!");
-//                }
-//                else {
-//                    // credentials: thong tin xac thuc
-//                    if(password.equals(confirmPassword)){
-//                        Boolean checkUserEmail = db.checkEmail(email);
-//                        if(checkUserEmail == false){
-//                            Boolean insert = db.insertdata_user(email, name , phone , password);
-//                            if(insert == true){
-//                                Log.d("aaa", "Sign up successfully!!!");
-//                                Intent i = new Intent(getApplicationContext(), Log_in.class);
-//                                startActivity(i);
-//                            }
-//                            else{
-//                                Log.d("aaa", "Sign up failed!!!");
-//
-//                            }
-//                        }
-//                        else {
-//                            Log.d("aaa", "User already exists! Please login");
-//                        }
-//                    }
-//                    else {
-//                        Log.d("aaa", "Password is not matching");
-//                    }
-//
-//                }
-                i.putExtra("email", email);
-                i.putExtra("phone", phone);
-                startActivity(i);
+                if(email.equals("")||password.equals("")||confirmPassword.equals("")||name.equals("")){
+                    Log.d("aaa", "onClick: Enter full fields!!!");
+                }
+                else {
+                    // credentials: thong tin xac thuc
+                    if(password.equals(confirmPassword)){
+                        Boolean checkUserEmail = database.checkEmail(email);
+                        if(checkUserEmail == false){
+                            Boolean insert = database.insertdata_user(email, name , phone , password);
+                            if(insert == true){
+                                Log.d("aaa", "Sign up successfully!!!");
+                                Intent i = new Intent(Register.this, otp.class);
+                                i.putExtra("email", email);
+                                i.putExtra("phone", phone);
+                                startActivity(i);
+                            }
+                            else{
+                                Log.d("aaa", "Sign up failed!!!");
+                            }
+                        }
+                        else {
+                            Log.d("aaa", "User already exists! Please login");
+                        }
+                    }
+                    else {
+                        Log.d("aaa", "Password is not matching");
+                    }
+
+                }
             }
         });
         binding.SigninBtn.setOnClickListener(new View.OnClickListener() {

@@ -14,6 +14,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.ui_project2024.DB_Manager.Database;
 import com.example.ui_project2024.DB_Manager.Mydatabase_Login_register;
 import com.example.ui_project2024.MainActivity;
 import com.example.ui_project2024.R;
@@ -23,6 +24,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 public class Log_in extends AppCompatActivity {
     ActivityLogInBinding binding;
     Mydatabase_Login_register db;
+    Database database;
     private boolean showpass = false;
 
     GoogleSignInOptions gso;
@@ -35,6 +37,7 @@ public class Log_in extends AppCompatActivity {
         EditText passEt = findViewById(R.id.pass_et);
         ImageView passicon = findViewById(R.id.pass_icon);
         db = new Mydatabase_Login_register(this);
+        database = new Database(this);
         passicon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,7 +84,5 @@ public class Log_in extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-
     }
 }
