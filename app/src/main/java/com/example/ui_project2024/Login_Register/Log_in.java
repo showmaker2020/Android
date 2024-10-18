@@ -66,7 +66,7 @@ public class Log_in extends AppCompatActivity {
                     Log.d("aaa", "Please enter all the fields");
                 }
                 else {
-                    Boolean checkCredentials = db.checkEmailPassword(email, password);
+                    Boolean checkCredentials = database.checkEmailPassword(email, password);
                     if(checkCredentials == true){
                         Log.d("aaa", "Login successful");
                         Intent intent  = new Intent(getApplicationContext(), MainActivity.class);

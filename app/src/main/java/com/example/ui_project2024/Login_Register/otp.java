@@ -71,11 +71,13 @@ public class otp extends AppCompatActivity {
             public void onClick(View v) {
                 final String genOtp = otp1.getText().toString() + otp2.getText().toString()
                         + otp3.getText().toString() + otp4.getText().toString();
+                Log.d("aaa", genOtp);
                 if(genOtp.length() == 4){
                     database = new Database(otp.this);
                     if(database.onSubmitOtpClicked(String.valueOf(emailotp), genOtp)){
                         database.updateCheckColumn(String.valueOf(emailotp));
-                        Intent intent = new Intent(otp.this, Log_in.class);
+                        Log.d("aaa", "Ma otp hop le");
+                        Intent intent = new Intent(getApplicationContext(), Log_in.class);
                         startActivity(intent);
                     } else {
                         Log.d("aaa", "Ma otp khong hop le");

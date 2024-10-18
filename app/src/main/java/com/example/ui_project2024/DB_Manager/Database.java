@@ -14,7 +14,7 @@ import java.util.Random;
 
 public class Database extends SQLiteOpenHelper {
     private Context context;
-    private static final String DB_NAME = "SignLog.db";
+    private static final String DB_NAME = "SignLog_Otp.db";
     private static final int VERSION = 1;
     private static final String TABLE_NAME = "user_table_otp";
     private static final String COLUMN_NAME_USER = "column_name_user";
@@ -28,17 +28,16 @@ public class Database extends SQLiteOpenHelper {
         this.context = context;
     }
 
-    private String otp(){
+    private String otp() {
         Random rand = new Random();
-        int code = 0;
-        // Tạo 4 số ngẫu nhiên
+        StringBuilder code = new StringBuilder();
         for (int i = 0; i < 4; i++) {
             int randomNumber = rand.nextInt(10);
-            code += randomNumber;
-            code*=10;
+            code.append(randomNumber);
         }
-        return String.valueOf(code);
+        return code.toString();
     }
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
@@ -60,7 +59,9 @@ public class Database extends SQLiteOpenHelper {
         cv.put(COLUMN_PHONE_NUMBER, phone);
         cv.put(COLUMN_PASSWORD, pass);
         cv.put(COLUMN_OTP, otp());
+        String s = otp();
         cv.put(COLUMN_CHECK, 0);
+        Log.d("aaa", "insertdata_user: " + s);
         long res = db.insert(TABLE_NAME, null, cv);
         if (res == -1){
             Log.d("aaa", "insertdata_user: Khong thanh cong");
@@ -89,12 +90,20 @@ public class Database extends SQLiteOpenHelper {
     }
     public boolean verifyOTP(String email, String otp) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT " + COLUMN_OTP + " FROM " + TABLE_NAME + " WHERE " + COLUMN_EMAIL + "=?", new String[]{email});
-        if (cursor != null && cursor.moveToFirst()) {
-            @SuppressLint("Range")
-            String storedOtp = cursor.getString(cursor.getColumnIndex(COLUMN_OTP));
+        String q = "SELECT " + COLUMN_OTP + " FROM " + TABLE_NAME + " WHERE " + COLUMN_EMAIL + "=?";
+        Cursor cursor = db.rawQuery(q, new String[]{email});
+        if (cursor != null) {
+            if (cursor.moveToNext()) {
+                @SuppressLint("Range")
+                String storedOtp = cursor.getString(0);  // Lấy giá trị OTP từ cursor
+
+                // In ra giá trị thực của storedOtp
+                Log.d("verifyOTP", "OTP from DB: " + storedOtp);  // Sử dụng Log.d để in giá trị storedOtp
+
+                cursor.close();
+                return storedOtp.equals(otp);
+            }
             cursor.close();
-            return storedOtp.equals(otp);
         }
         return false;
     }
@@ -108,7 +117,7 @@ public class Database extends SQLiteOpenHelper {
     public boolean onSubmitOtpClicked(String email, String inputOtp) {
         SQLiteDatabase dbHelper = this.getWritableDatabase();
         boolean isOtpValid = verifyOTP(email, inputOtp);
-        if (isOtpValid) {
+        if (!isOtpValid) {
             SQLiteDatabase db = this.getWritableDatabase();
             ContentValues contentValues = new ContentValues();
             contentValues.put(COLUMN_CHECK, 1);

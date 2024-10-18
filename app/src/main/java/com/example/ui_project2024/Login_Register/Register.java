@@ -80,6 +80,7 @@ public class Register extends AppCompatActivity {
             }
         });
         db = new Mydatabase_Login_register(this);
+        database = new Database(this);
         binding.singupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,7 +97,7 @@ public class Register extends AppCompatActivity {
                     if(password.equals(confirmPassword)){
                         Boolean checkUserEmail = database.checkEmail(email);
                         if(checkUserEmail == false){
-                            Boolean insert = database.insertdata_user(email, name , phone , password);
+                            Boolean insert = database.insertdata_user(name, phone , email , password);
                             if(insert == true){
                                 Log.d("aaa", "Sign up successfully!!!");
                                 Intent i = new Intent(Register.this, otp.class);
