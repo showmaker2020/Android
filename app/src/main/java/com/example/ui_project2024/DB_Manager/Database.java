@@ -13,6 +13,34 @@ import androidx.annotation.Nullable;
 import java.util.Random;
 
 public class Database extends SQLiteOpenHelper {
+
+//  1.Sân
+//  -maSan
+//  -tenSan
+//  -diaChi
+//  -Gia
+//  -moTa
+//
+//  2.HoaDon
+//  -MaHD
+//  -TenKhach
+//  -Sdt
+//  -maSan
+//  -NgayDat
+//  -GioDat
+//  -GioTra
+//  -TongTienSan
+//
+//  3.Dich Vu
+//  -maDV
+//  -tenDV
+//  -Gia
+//  -SoLuong
+//
+//  4.CTHD
+//  -MaHD
+//  -maDV
+//  -tongTienDV
     private Context context;
     private static final String DB_NAME = "SignLog_Otp.db";
     private static final int VERSION = 1;
@@ -88,18 +116,16 @@ public class Database extends SQLiteOpenHelper {
             return false;
         }
     }
+    @SuppressLint("Range")
     public boolean verifyOTP(String email, String otp) {
         SQLiteDatabase db = this.getReadableDatabase();
         String q = "SELECT " + COLUMN_OTP + " FROM " + TABLE_NAME + " WHERE " + COLUMN_EMAIL + "=?";
         Cursor cursor = db.rawQuery(q, new String[]{email});
         if (cursor != null) {
             if (cursor.moveToNext()) {
-                @SuppressLint("Range")
-                String storedOtp = cursor.getString(0);  // Lấy giá trị OTP từ cursor
-
-                // In ra giá trị thực của storedOtp
-                Log.d("verifyOTP", "OTP from DB: " + storedOtp);  // Sử dụng Log.d để in giá trị storedOtp
-
+                String storedOtp;
+                storedOtp = cursor.getString(cursor.getColumnIndex(COLUMN_OTP));
+                Log.d("verifyOTP", "OTP from DB: " + storedOtp);
                 cursor.close();
                 return storedOtp.equals(otp);
             }
@@ -131,8 +157,6 @@ public class Database extends SQLiteOpenHelper {
            return false;
         }
     }
-
-
     public Boolean checkEmailPassword(String email, String password){
         SQLiteDatabase MyDatabase = this.getWritableDatabase();
         String query = "Select * from " + TABLE_NAME + " where " +  COLUMN_EMAIL + " = ? and " +

@@ -7,18 +7,18 @@
         android:icon="@drawable/baseline_home_24"/>
 
     <item
-        android:id="@+id/shorts"
-        android:title="Shorts"
-        android:icon="@drawable/baseline_whatshot_24"
+        android:id="@+id/chart"
+        android:title="Chart"
+        android:icon="@drawable/line_chart"
         />
     <item
-        android:id="@+id/library"
+        android:id="@+id/bill"
         android:title="Bill"
         android:icon="@drawable/bill_svg" />
     <item
-        android:id="@+id/subscriptions"
-        android:title="Setting"
-        android:icon="@drawable/baseline_settings_24" />
+        android:id="@+id/Exit"
+        android:title="Exit"
+        android:icon="@drawable/baseline_exit_to_app_24" />
     <item
         android:title=""
         android:enabled="false"/>

@@ -82,11 +82,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     Log.d("aaa", "Home is Clicked");
                     replaceFragment(new HomeFragment());
                     break;
-                case R.id.shorts:
-                    Log.d("aaa", "Search is Clicked!!!!!!!");
+                case R.id.chart:
+                    Log.d("aaa", "Chart is Clicked!!!!!!!");
                     replaceFragment(new ShortsFragment());
                     break;
-                case R.id.subscriptions:
+                case R.id.bill:
+                    Log.d("aaa", "Bill is Clicked");
+                    String name = "";
+                    String address= "";
+                    int image = 0;
+                    LibraryFragment libraryFragment = LibraryFragment.newInstance(name, address, image);
+                    replaceFragment(libraryFragment);
+                    break;
+                case R.id.Exit:
                     Log.d("aaa", "Log out is Clicked");
                     getSharedPreferences("USER_PREF", MODE_PRIVATE)
                             .edit()
@@ -96,13 +104,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     startActivity(intent);
                     finish();
                     Log.d("aaa", "Log out: thành công!!!");
-                case R.id.library:
-                    Log.d("aaa", "Library is Clicked");
-                    String name = "";
-                    String address= "";
-                    int image = 0;
-                    LibraryFragment libraryFragment = LibraryFragment.newInstance(name, address, image);
-                    replaceFragment(libraryFragment);
             }
             return true;
         });

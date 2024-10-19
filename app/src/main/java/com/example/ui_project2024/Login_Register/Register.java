@@ -1,6 +1,7 @@
 package com.example.ui_project2024.Login_Register;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -19,6 +20,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.ui_project2024.DB_Manager.Data_Stadium;
 import com.example.ui_project2024.DB_Manager.Database;
 import com.example.ui_project2024.DB_Manager.Mydatabase_Login_register;
 import com.example.ui_project2024.R;
@@ -28,7 +30,7 @@ import com.example.ui_project2024.databinding.ActivityRegisterBinding;
 public class Register extends AppCompatActivity {
     ActivityRegisterBinding binding;
     Mydatabase_Login_register db;
-    Database database;
+    Data_Stadium database;
     private boolean passshow = false;
     private boolean passconfirmShow = false;
     EditText emailEt, passEt, passEtConfirm, fullnameEt, mobliePhone;
@@ -80,7 +82,7 @@ public class Register extends AppCompatActivity {
             }
         });
         db = new Mydatabase_Login_register(this);
-        database = new Database(this);
+        database = new Data_Stadium(this);
         binding.singupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -127,6 +129,8 @@ public class Register extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+
 
     }
 }

@@ -16,7 +16,6 @@ import com.example.ui_project2024.R;
 import java.util.ArrayList;
 
 public class Bill_Adapter extends RecyclerView.Adapter<Bill_Adapter.ViewHolder> {
-
     private final ArrayList<List_Bill> billList;
     private final Context context;
     public Bill_Adapter(Context context, ArrayList<List_Bill> billList) {

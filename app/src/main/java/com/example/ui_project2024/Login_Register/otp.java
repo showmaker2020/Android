@@ -23,6 +23,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.ui_project2024.DB_Manager.Data_Stadium;
 import com.example.ui_project2024.DB_Manager.Database;
 import com.example.ui_project2024.R;
 import com.google.android.material.internal.TextWatcherAdapter;
@@ -30,7 +31,7 @@ import com.google.android.material.internal.TextWatcherAdapter;
 public class otp extends AppCompatActivity {
     EditText otp1, otp2, otp3, otp4;
     TextView resend, emailotp, otpphone;
-    Database database;
+    Data_Stadium database;
     private boolean resendEnable = false;
     private int resendTime = 60;
     private int selectotppos = 0;
@@ -73,7 +74,7 @@ public class otp extends AppCompatActivity {
                         + otp3.getText().toString() + otp4.getText().toString();
                 Log.d("aaa", genOtp);
                 if(genOtp.length() == 4){
-                    database = new Database(otp.this);
+                    database = new Data_Stadium(otp.this);
                     if(database.onSubmitOtpClicked(String.valueOf(emailotp), genOtp)){
                         database.updateCheckColumn(String.valueOf(emailotp));
                         Log.d("aaa", "Ma otp hop le");
