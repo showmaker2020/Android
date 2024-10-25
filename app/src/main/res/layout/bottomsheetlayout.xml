@@ -28,7 +28,6 @@
             android:layout_marginStart="12dp"
             android:layout_marginTop="5dp"
             android:textSize="25dp" />
-
         <ImageView
             android:background="@color/lavender"
             android:layout_width="wrap_content"
@@ -37,10 +36,7 @@
             android:layout_marginLeft="250dp"
             android:layout_marginTop="8dp"
             android:id="@+id/cancelButton"/>
-
     </LinearLayout>
-
-
     <LinearLayout
         android:id="@+id/layoutVideo"
         android:orientation="horizontal"
@@ -48,7 +44,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:padding="10dp">
-
         <ImageView
             android:background="@color/lavender"
             android:layout_width="wrap_content"
@@ -59,21 +54,17 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Upload a video"
+            android:text="Create a bill"
             android:textColor="@color/lavender"
             android:layout_marginLeft="30dp"
             android:textSize="16sp"/>
-
     </LinearLayout>
-
     <LinearLayout
         android:id="@+id/layoutShorts"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp">
-
-
         <ImageView
             android:background="@color/lavender"
             android:layout_width="wrap_content"
@@ -83,7 +74,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Create a short"
+            android:text="Bill no pay"
             android:textColor="@color/lavender"
             android:layout_marginLeft="30dp"
             android:textSize="16sp"/>
@@ -103,15 +94,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/baseline_cast_connected_24"/>
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Go live"
+            android:text="Bill pay"
             android:textColor="@color/lavender"
             android:layout_marginLeft="30dp"
             android:textSize="16sp"/>
-
     </LinearLayout>
 
 </LinearLayout>

@@ -3,6 +3,7 @@ package com.example.ui_project2024;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -28,6 +29,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.ui_project2024.DB_Manager.Data_Stadium;
 import com.example.ui_project2024.Login_Register.Log_in;
 import com.example.ui_project2024.databinding.ActivityMainBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -40,6 +42,8 @@ import java.util.Objects;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     FloatingActionButton fab;
     DrawerLayout drawer;
+
+    Data_Stadium db;
     BottomNavigationView bottomNavigationView;
     NavigationView nav;
 
@@ -59,6 +63,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         // Nếu đã đăng nhập, tiếp tục xử lý trong MainActivity
         setContentView(R.layout.activity_main);
+        db = new Data_Stadium(this);
+
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         fab = findViewById(R.id.fab);
         drawer = findViewById(R.id.drawer_layout);
@@ -70,11 +76,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 R.string.close_nav);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-//        if (savedInstanceState == null) {
-//            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout,
-//                    new HomeFragment()).commit();
-//            nav.setCheckedItem(R.id.nav_home);
-//        }
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout,
+                    new HomeFragment()).commit();
+            nav.setCheckedItem(R.id.nav_home);
+        }
         bottomNavigationView.setOnItemSelectedListener(item -> {
             Log.d("BottomNav", "Item selected: " + item.getItemId());
             switch (item.getItemId()) {
@@ -88,10 +94,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     break;
                 case R.id.bill:
                     Log.d("aaa", "Bill is Clicked");
-                    String name = "";
-                    String address= "";
-                    int image = 0;
-                    LibraryFragment libraryFragment = LibraryFragment.newInstance(name, address, image);
+                    String name ="";
+                    String phone = "";
+                    String sevrice = "";
+                    String time_pick = "";
+                    String time_return = "";
+                    int total = 0;
+                    int status = 0;
+                    LibraryFragment libraryFragment = LibraryFragment.newInstance(name, phone, sevrice, time_pick, time_return, total, status);
                     replaceFragment(libraryFragment);
                     break;
                 case R.id.Exit:
@@ -160,15 +170,36 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ImageView cancelButton = dialog.findViewById(R.id.cancelButton);
         videoLayout.setOnClickListener(v -> {
             dialog.dismiss();
-            Log.d("aaa", "Video is Clicked");
+            Log.d("aaa", "Bill create is clicked");
+            replaceFragment(new createABillFragment());
+
         });
         shortsLayout.setOnClickListener(v -> {
             dialog.dismiss();
-            Log.d("aaa", "Shorts is Clicked");
+            Log.d("aaa", "bill no pay is clicked");
+            String name ="";
+            String phone = "";
+            String sevrice = "";
+            String time_pick = "";
+            String time_return = "";
+            int total = 0;
+            int status = 0;
+            billNoPayFragment libraryFragment = billNoPayFragment.newInstance(name, phone, sevrice, time_pick, time_return, total, status);
+            replaceFragment(libraryFragment);
         });
         liveLayout.setOnClickListener(v -> {
             dialog.dismiss();
-            Log.d("aaa", "Live is Clicked");
+            Log.d("aaa", "bill pay is clickked");
+            Log.d("aaa", "Bill is Clicked");
+            String name ="";
+            String phone = "";
+            String sevrice = "";
+            String time_pick = "";
+            String time_return = "";
+            int total = 0;
+            int status = 0;
+            Bill_payFragment libraryFragment = Bill_payFragment.newInstance(name, phone, sevrice, time_pick, time_return, total, status);
+            replaceFragment(libraryFragment);
         });
         cancelButton.setOnClickListener(view -> dialog.dismiss());
         dialog.show();
@@ -207,6 +238,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
         }
         return false;
+    }
+    public void getdataindatabase(){
+        String name ="";
+        String phone = "";
+        String sevrice = "";
+        String time_pick = "";
+        String time_return = "";
+        int total = 0;
+        int status = 0;
     }
 
 }

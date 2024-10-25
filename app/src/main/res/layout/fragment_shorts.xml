@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ShortsFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -13,5 +14,50 @@
         android:gravity="center"
         android:textSize="30sp"
         android:textColor="@color/lavender" />
+    <com.github.mikephil.charting.charts.PieChart
+        android:id="@+id/pieChart"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Spinner
+            android:id="@+id/spinner_selection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/options_array" />
+        <EditText
+            android:id="@+id/time1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:hint="Time"
+            android:padding="8dp"
+            tools:ignore="Suspicious0dp" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="8dp"
+            android:text="To"
+            tools:ignore="Suspicious0dp"/>
+        <EditText
+            android:id="@+id/time2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:hint="Time"
+            android:padding="8dp"
+            tools:ignore="Suspicious0dp" />
+        <ImageButton
+            android:id="@+id/search_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_manage_search_24"
+            android:layout_weight="1">
+        </ImageButton>
+
+    </LinearLayout>
 
 </FrameLayout>

@@ -10,6 +10,14 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.example.ui_project2024.List.List_Bill_Items;
+import com.github.mikephil.charting.data.PieEntry;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Random;
 
 public class Data_Stadium extends SQLiteOpenHelper {
@@ -106,7 +114,7 @@ public class Data_Stadium extends SQLiteOpenHelper {
                 ");";
         db.execSQL(CREATE_TABLE_USER);
 
-        String CREATE_TABLE_STADIUM = "CREATE TABLE " + TABLE_NAME_STADIUM + " (" +
+        String CREATE_TABLE_STADIUM = "CREATE TABLE  IF NOT EXISTS " + TABLE_NAME_STADIUM + " (" +
                 COLUMN_ID_STADIUM + " TEXT PRIMARY KEY, " +
                 COLUMN_NAME_STADIUM + " TEXT, " +
                 COLUMN_ADDRESS_STADIUM + " TEXT, " +
@@ -147,7 +155,6 @@ public class Data_Stadium extends SQLiteOpenHelper {
                 "FOREIGN KEY (" + COLUMN_ID_BILL_DETAIL + ") REFERENCES " + TABLE_NAME_BILL + "(" + COLUMN_ID_BILL + ")" +
                 ");";
         db.execSQL(CREATE_TABLE_BILL_DETAIL);
-        initDB();
     }
 
     @Override
@@ -159,42 +166,9 @@ public class Data_Stadium extends SQLiteOpenHelper {
         db.execSQL("drop Table if exists " + TABLE_NAME_BILL_DETAIL);
     }
 
-    public void initDB() {
+    public void ExData(String s){
         SQLiteDatabase db = this.getWritableDatabase();
-        // insert data table name stadiim
-        String a = "INSERT INTO TABLE_NAME_STADIUM (COLUMN_ID_STADIUM, COLUMN_NAME_STADIUM, COLUMN_ADDRESS_STADIUM, COLUMN_PRICE_STADIUM, COLUMN_DESCRIPTION_STADIUM) VALUES " +
-                "('S001', 'Stadium A', '123 Stadium Street', " + 500 + ",'A large football stadium')," +
-                "('S002', 'Stadium B', '456 Arena Avenue', " + 600 + ", 'A medium-sized arena')," +
-                "('S003', 'Stadium C', '789 Field Road', " + 450 + ", 'A small sports field')," +
-                "('S004', 'Stadium D', '321 Stadium Lane', " + 700 + ", 'An Olympic-size stadium'), " +
-                "('S005', 'Stadium E', '654 Arena Circle'," + 550 + ", 'A modern indoor arena')";
-        db.execSQL(a);
-
-        // insert into table name bill
-        String b = "INSERT INTO TABLE_NAME_BILL (COLUMN_ID_BILL, COLUMN_NAME_CUSTOMER, COLUMN_PHONE_CUSTOMER, COLUMN_ID_STADIUM_BILL, COLUMN_DATE_BILL, COLUMN_TIME_BILL, COLUMN_RETURN_TIME_BILL, COLUMN_TOTAL_PRICE_BILL, COLUMN_CHECK)" +
-                "VALUES" + "('BD001', 'John Doe', '123456789', 'S001', '2024-10-18', '10:00', +  '11:30', " + 200 + "," + 0 + " ), "
-                + "('BD002', 'Jane Smith', '987654321', 'S002', '2024-10-17', '09:00', '10:30', " + 200 + "," + 0 + ")," +
-                "('BD003', 'Bob Johnson', '456789123', 'S003', '2024-10-16', '9:30', '11:00', " + 200 + "," + 0 + ")," +
-                "('BD004', 'Alice Brown', '321654987', 'S004', '2024-10-15', '14:00', '15:30'," + 250 + "," + 0 + ")," +
-                "('BD005', 'Charlie White', '654987321', 'S005', '2024-10-14', '08:30', '10:00'," + 200 + "," + 0 + ")";
-        db.execSQL(b);
-
-        String c = "INSERT INTO TABLE_NAME_SERVICE (COLUMN_ID_SERVICE, COLUMN_NAME_SERVICE, COLUMN_COUNT_NAME_SERVICE, COLUMN_PRICE_SERVICE, COLUMN_QUANTITY_SERVICE)" +
-                "VALUES" + "('SV001', 'Water Bottle'," + 2 + "," + 20 + ", " + 2 * 20 + ")," +
-                "('SV002', 'Towel'," + 3 + "," + 20 + ", " + 3 * 20 + ")," +
-                " ('SV003', 'Jersey'," + 1 + "," + 50 + ", " + 1 * 50 + "), " +
-                " ('SV004', 'Cap'," + 1 + "," + 30 + ", " + 1 * 30 + "), " +
-                " ('SV005', 'Shoes'," + 1 + "," + 100 + ", " + 1 * 100 + ")";
-        db.execSQL(c);
-
-        String d = "INSERT INTO TABLE_NAME_BILL_DETAIL (COLUMN_ID_BILL_DETAIL, COLUMN_ID_BILL_DETAIL_SERVICE, COLUMN_TOTAL_PRICE_DETAIL)" +
-                "VALUES" +
-                "('BD001', 'SV001'," + 100 + ")," +
-                "('BD002', 'SV002'," + 45 + ")," +
-                "('BD003', 'SV003'," + 150 + ")," +
-                "('BD004', 'SV004'," + 30 + ")," +
-                "('BD005', 'SV005'," + 100 + ")";
-        db.execSQL(d);
+        db.execSQL(s);
     }
 
     // user
@@ -386,4 +360,336 @@ public class Data_Stadium extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery("select * from " + TABLE_NAME_BILL_DETAIL, null);
         return cursor;
     }
+
+    public void initDB() {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // insert data into stadium table
+        String a = "INSERT INTO " + TABLE_NAME_STADIUM + " VALUES " +
+                "('S001', 'Stadium A', '123 Stadium Street', 500, 'A large football stadium')," +
+                "('S002', 'Stadium B', '456 Arena Avenue', 600, 'A medium-sized arena')," +
+                "('S003', 'Stadium C', '789 Field Road', 450, 'A small sports field')," +
+                "('S004', 'Stadium D', '321 Stadium Lane', 700, 'An Olympic-size stadium'), " +
+                "('S005', 'Stadium E', '654 Arena Circle', 550, 'A modern indoor arena')";
+        db.execSQL(a);
+
+        // insert data into bill table
+        String b = "INSERT INTO " + TABLE_NAME_BILL + " VALUES " +
+                "('BD001', 'John Doe', '123456789', 'S001', '2024-10-18', '10:00', '11:30', 200, 0)," +
+                "('BD002', 'Jane Smith', '987654321', 'S002', '2024-10-17', '09:00', '10:30', 200, 0)," +
+                "('BD003', 'Bob Johnson', '456789123', 'S003', '2024-10-16', '9:30', '11:00', 200, 0)," +
+                "('BD004', 'Alice Brown', '321654987', 'S004', '2024-10-15', '14:00', '15:30', 250, 0)," +
+                "('BD005', 'Charlie White', '654987321', 'S005', '2024-10-14', '08:30', '10:00', 200, 0)";
+        db.execSQL(b);
+
+        // insert data into service table
+        String c = "INSERT INTO " + TABLE_NAME_SERVICE +
+                " (COLUMN_ID_SERVICE, COLUMN_NAME_SERVICE, COLUMN_COUNT_NAME_SERVICE, COLUMN_PRICE_SERVICE, COLUMN_QUANTITY_SERVICE) " +
+                "VALUES " +
+                "('SV001', 'Water Bottle', 2, 20, 40)," +
+                "('SV002', 'Towel', 3, 20, 60)," +
+                "('SV003', 'Jersey', 1, 50, 50)," +
+                "('SV004', 'Cap', 1, 30, 30)," +
+                "('SV005', 'Shoes', 1, 100, 100)";
+        db.execSQL(c);
+
+        // insert data into bill detail table
+        String d = "INSERT INTO " + TABLE_NAME_BILL_DETAIL +
+                " (COLUMN_ID_BILL_DETAIL, COLUMN_ID_BILL_DETAIL_SERVICE, COLUMN_TOTAL_PRICE_DETAIL) " +
+                "VALUES " +
+                "('BD001', 'SV001', 100)," +
+                "('BD002', 'SV002', 45)," +
+                "('BD003', 'SV003', 150)," +
+                "('BD004', 'SV004', 30)," +
+                "('BD005', 'SV005', 100)";
+        db.execSQL(d);
+        Log.d("aaa", "initDB: thanh cong");
+    }
+
+    public void init2DB() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String b = "INSERT INTO " + TABLE_NAME_BILL + " VALUES " +
+                "('BD006', 'John Doe', '123456789', 'S001', '2024-10-20', '10:00', '11:30', 250, 1)," +
+                "('BD007', 'Jane Smith', '987654321', 'S002', '2024-10-21', '09:00', '10:30', 230, 1)," +
+                "('BD008', 'Bob Johnson', '456789123', 'S003', '2024-10-22', '9:30', '11:00', 240, 1)," +
+                "('BD009', 'Alice Brown', '321654987', 'S004', '2024-10-23', '14:00', '15:30', 270, 1)," +
+                "('BD010', 'Charlie White', '654987321', 'S005', '2024-10-24', '08:30', '10:00', 280, 1)";
+        db.execSQL(b);
+        Log.d("aaa", "initDB: thanh cong");
+    }
+
+    public void inti3DB(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String d = "INSERT INTO " + TABLE_NAME_BILL_DETAIL +
+                " (COLUMN_ID_BILL_DETAIL, COLUMN_ID_BILL_DETAIL_SERVICE, COLUMN_TOTAL_PRICE_DETAIL) " +
+                "VALUES " +
+                "('BD006', 'SV001', 100)," +
+                "('BD007', 'SV002', 50)," +
+                "('BD008', 'SV003', 170)," +
+                "('BD009', 'SV004', 90)," +
+                "('BD010', 'SV005', 100)";
+        db.execSQL(d);
+        Log.d("aaa", "initDB3: thanh cong");
+    }
+
+    public ArrayList<List_Bill_Items> getAllBills() {
+        ArrayList<List_Bill_Items> billList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        // Lấy tất cả các hóa đơn từ bảng BILL (giả định)
+        String q = "SELECT " + TABLE_NAME_BILL + "." + COLUMN_ID_BILL + ", " +
+                TABLE_NAME_BILL + "." + COLUMN_NAME_CUSTOMER + ", " +
+                TABLE_NAME_BILL + "." + COLUMN_PHONE_CUSTOMER + ", " +
+                TABLE_NAME_BILL + "." + COLUMN_ID_STADIUM_BILL + ", " +
+                TABLE_NAME_BILL + "." + COLUMN_DATE_BILL + ", " +
+                TABLE_NAME_BILL + "." + COLUMN_TIME_BILL + ", " +
+                TABLE_NAME_BILL + "." + COLUMN_RETURN_TIME_BILL + ", " +
+                "SUM(" +
+                TABLE_NAME_BILL + "." + COLUMN_TOTAL_PRICE_BILL + " + " +
+                TABLE_NAME_BILL_DETAIL + "." + COLUMN_TOTAL_PRICE_DETAIL + " + " +
+                TABLE_NAME_SERVICE + "." + COLUMN_QUANTITY_SERVICE + " + " +
+                TABLE_NAME_STADIUM + "." + COLUMN_PRICE_STADIUM + ") as 'total', " +
+                TABLE_NAME_BILL + "." + COLUMN_CHECK + " " +
+                " FROM " + TABLE_NAME_BILL +
+                " INNER JOIN " + TABLE_NAME_STADIUM +
+                " ON " + TABLE_NAME_BILL + "." + COLUMN_ID_STADIUM_BILL + " = " + TABLE_NAME_STADIUM + "." + COLUMN_ID_STADIUM +
+                " INNER JOIN " + TABLE_NAME_BILL_DETAIL +
+                " ON " + TABLE_NAME_BILL + "." + COLUMN_ID_BILL + " = " + TABLE_NAME_BILL_DETAIL + "." + COLUMN_ID_BILL_DETAIL +
+                " INNER JOIN " + TABLE_NAME_SERVICE +
+                " ON " + TABLE_NAME_BILL_DETAIL + "." + COLUMN_ID_BILL_DETAIL_SERVICE + " = " + TABLE_NAME_SERVICE + "." + COLUMN_ID_SERVICE +
+                " GROUP BY " + TABLE_NAME_BILL + "." + COLUMN_ID_BILL + ", " + TABLE_NAME_STADIUM + "." + COLUMN_PRICE_STADIUM;
+        Cursor cursor = db.rawQuery(q, null);
+        if (cursor.moveToFirst()) {
+            do {
+                String id = cursor.getString(0);
+                String name = cursor.getString(1);
+                String phone = cursor.getString(2);
+                String id_studium = cursor.getString(3);
+                String date = cursor.getString(4);
+                String time = cursor.getString(5);
+                String time_return  = cursor.getString(6);
+                int total = cursor.getInt(7);
+                int status = cursor.getInt(8);
+                // Thêm hóa đơn vào danh sách
+                billList.add(new List_Bill_Items(id, name, phone, id_studium, date, time, time_return, total, status));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return billList;
+    }
+    public ArrayList<List_Bill_Items> getBillsPayment() {
+        ArrayList<List_Bill_Items> billList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String q = "SELECT " + TABLE_NAME_BILL + "." + COLUMN_ID_BILL + ", " +
+                TABLE_NAME_BILL + "." + COLUMN_NAME_CUSTOMER + ", " +
+                TABLE_NAME_BILL + "." + COLUMN_PHONE_CUSTOMER + ", " +
+                TABLE_NAME_BILL + "." + COLUMN_ID_STADIUM_BILL + ", " +
+                TABLE_NAME_BILL + "." + COLUMN_DATE_BILL + ", " +
+                TABLE_NAME_BILL + "." + COLUMN_TIME_BILL + ", " +
+                TABLE_NAME_BILL + "." + COLUMN_RETURN_TIME_BILL + ", " +
+                "SUM(" +
+                TABLE_NAME_BILL + "." + COLUMN_TOTAL_PRICE_BILL + " + " +
+                TABLE_NAME_BILL_DETAIL + "." + COLUMN_TOTAL_PRICE_DETAIL + " + " +
+                TABLE_NAME_SERVICE + "." + COLUMN_QUANTITY_SERVICE + " + " +
+                TABLE_NAME_STADIUM + "." + COLUMN_PRICE_STADIUM + ") as 'total', " +
+                TABLE_NAME_BILL + "." + COLUMN_CHECK + " " +
+                " FROM " + TABLE_NAME_BILL +
+                " INNER JOIN " + TABLE_NAME_STADIUM +
+                " ON " + TABLE_NAME_BILL + "." + COLUMN_ID_STADIUM_BILL + " = " + TABLE_NAME_STADIUM + "." + COLUMN_ID_STADIUM +
+                " INNER JOIN " + TABLE_NAME_BILL_DETAIL +
+                " ON " + TABLE_NAME_BILL + "." + COLUMN_ID_BILL + " = " + TABLE_NAME_BILL_DETAIL + "." + COLUMN_ID_BILL_DETAIL +
+                " INNER JOIN " + TABLE_NAME_SERVICE +
+                " ON " + TABLE_NAME_BILL_DETAIL + "." + COLUMN_ID_BILL_DETAIL_SERVICE + " = " + TABLE_NAME_SERVICE + "." + COLUMN_ID_SERVICE +
+                " GROUP BY " + TABLE_NAME_BILL + "." + COLUMN_ID_BILL + ", " + TABLE_NAME_STADIUM + "." + COLUMN_PRICE_STADIUM
+                + " HAVING " + TABLE_NAME_BILL + "." + COLUMN_CHECK + " = " + 1;
+        Cursor cursor = db.rawQuery(q , null);
+        if (cursor.moveToFirst()) {
+            do {
+                String id = cursor.getString(0);
+                String name = cursor.getString(1);
+                String phone = cursor.getString(2);
+                String id_studium = cursor.getString(3);
+                String date = cursor.getString(4);
+                String time = cursor.getString(5);
+                String time_return  = cursor.getString(6);
+                int total = cursor.getInt(7);
+                int status = cursor.getInt(8);
+                // Thêm hóa đơn vào danh sách
+                billList.add(new List_Bill_Items(id, name, phone, id_studium, date, time, time_return, total, status));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return billList;
+    }
+
+    public ArrayList<List_Bill_Items> getnoBillsPayment() {
+        ArrayList<List_Bill_Items> billList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String q = "SELECT " + TABLE_NAME_BILL + "." + COLUMN_ID_BILL + ", " +
+                TABLE_NAME_BILL + "." + COLUMN_NAME_CUSTOMER + ", " +
+                TABLE_NAME_BILL + "." + COLUMN_PHONE_CUSTOMER + ", " +
+                TABLE_NAME_BILL + "." + COLUMN_ID_STADIUM_BILL + ", " +
+                TABLE_NAME_BILL + "." + COLUMN_DATE_BILL + ", " +
+                TABLE_NAME_BILL + "." + COLUMN_TIME_BILL + ", " +
+                TABLE_NAME_BILL + "." + COLUMN_RETURN_TIME_BILL + ", " +
+                "SUM(" +
+                TABLE_NAME_BILL + "." + COLUMN_TOTAL_PRICE_BILL + " + " +
+                TABLE_NAME_BILL_DETAIL + "." + COLUMN_TOTAL_PRICE_DETAIL + " + " +
+                TABLE_NAME_SERVICE + "." + COLUMN_QUANTITY_SERVICE + " + " +
+                TABLE_NAME_STADIUM + "." + COLUMN_PRICE_STADIUM + ") as 'total', " +
+                TABLE_NAME_BILL + "." + COLUMN_CHECK + " " +
+                " FROM " + TABLE_NAME_BILL +
+                " INNER JOIN " + TABLE_NAME_STADIUM +
+                " ON " + TABLE_NAME_BILL + "." + COLUMN_ID_STADIUM_BILL + " = " + TABLE_NAME_STADIUM + "." + COLUMN_ID_STADIUM +
+                " INNER JOIN " + TABLE_NAME_BILL_DETAIL +
+                " ON " + TABLE_NAME_BILL + "." + COLUMN_ID_BILL + " = " + TABLE_NAME_BILL_DETAIL + "." + COLUMN_ID_BILL_DETAIL +
+                " INNER JOIN " + TABLE_NAME_SERVICE +
+                " ON " + TABLE_NAME_BILL_DETAIL + "." + COLUMN_ID_BILL_DETAIL_SERVICE + " = " + TABLE_NAME_SERVICE + "." + COLUMN_ID_SERVICE +
+                " GROUP BY " + TABLE_NAME_BILL + "." + COLUMN_ID_BILL + ", " + TABLE_NAME_STADIUM + "." + COLUMN_PRICE_STADIUM
+                + " HAVING " + TABLE_NAME_BILL + "." + COLUMN_CHECK + " = " + 0;
+        Cursor cursor = db.rawQuery(q , null);
+        if (cursor.moveToFirst()) {
+            do {
+                String id = cursor.getString(0);
+                String name = cursor.getString(1);
+                String phone = cursor.getString(2);
+                String id_studium = cursor.getString(3);
+                String date = cursor.getString(4);
+                String time = cursor.getString(5);
+                String time_return  = cursor.getString(6);
+                int total = cursor.getInt(7);
+                int status = cursor.getInt(8);
+                billList.add(new List_Bill_Items(id, name, phone, id_studium, date, time, time_return, total, status));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return billList;
+    }
+
+    public ArrayList<PieEntry> getchart(String time1, String time2) {
+        ArrayList<PieEntry> pieEntries = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Chuyển đổi time1 và time2 sang định dạng yyyy-MM-dd
+        SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+
+        try {
+            Date date1 = inputFormat.parse(time1);
+            Date date2 = inputFormat.parse(time2);
+
+            time1 = outputFormat.format(date1);  // Chuyển sang định dạng yyyy-MM-dd
+            time2 = outputFormat.format(date2);
+            Log.d("aaa", "getchart: " + time1);
+            Log.d("aaa", "getchart: " + time2);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return pieEntries; // Trả về danh sách rỗng nếu có lỗi trong việc chuyển đổi ngày
+        }
+        // Câu truy vấn SQL
+        String q = "SELECT " + TABLE_NAME_STADIUM + "." + COLUMN_NAME_STADIUM + ", " +
+                "SUM(" +
+                TABLE_NAME_BILL + "." + COLUMN_TOTAL_PRICE_BILL + " + " +
+                TABLE_NAME_BILL_DETAIL + "." + COLUMN_TOTAL_PRICE_DETAIL + " + " +
+                TABLE_NAME_SERVICE + "." + COLUMN_QUANTITY_SERVICE + " + " +
+                TABLE_NAME_STADIUM + "." + COLUMN_PRICE_STADIUM + ") as 'total' " +
+                " FROM " + TABLE_NAME_BILL +
+                " INNER JOIN " + TABLE_NAME_STADIUM +
+                " ON " + TABLE_NAME_BILL + "." + COLUMN_ID_STADIUM_BILL + " = " + TABLE_NAME_STADIUM + "." + COLUMN_ID_STADIUM +
+                " INNER JOIN " + TABLE_NAME_BILL_DETAIL +
+                " ON " + TABLE_NAME_BILL + "." + COLUMN_ID_BILL + " = " + TABLE_NAME_BILL_DETAIL + "." + COLUMN_ID_BILL_DETAIL +
+                " INNER JOIN " + TABLE_NAME_SERVICE +
+                " ON " + TABLE_NAME_BILL_DETAIL + "." + COLUMN_ID_BILL_DETAIL_SERVICE + " = " + TABLE_NAME_SERVICE + "." + COLUMN_ID_SERVICE +
+                " WHERE " + TABLE_NAME_BILL + "." + COLUMN_DATE_BILL + " BETWEEN '" + time1 + "' AND '" + time2 + "' " +  // Thêm dấu nháy đơn quanh ngày
+                " GROUP BY " + TABLE_NAME_BILL + "." + COLUMN_ID_BILL + ", " + TABLE_NAME_STADIUM + "." + COLUMN_PRICE_STADIUM +
+                " HAVING " + TABLE_NAME_BILL + "." + COLUMN_CHECK + " = 1";
+
+        Cursor cursor = db.rawQuery(q, null);
+        if (cursor.moveToFirst()) {
+            do {
+                String name = cursor.getString(0);
+                int value = cursor.getInt(1);
+                pieEntries.add(new PieEntry(value, name));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return pieEntries;
+    }
+
+    public ArrayList<PieEntry> getServiceDetails(String time1, String time2) {
+        ArrayList<PieEntry> pieEntries = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Chuyển đổi time1 và time2 sang định dạng yyyy-MM-dd
+        SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+
+        try {
+            Date date1 = inputFormat.parse(time1);
+            Date date2 = inputFormat.parse(time2);
+
+            time1 = outputFormat.format(date1);  // Chuyển sang định dạng yyyy-MM-dd
+            time2 = outputFormat.format(date2);
+            Log.d("aaa", "getchart: " + time1);
+            Log.d("aaa", "getchart: " + time2);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return pieEntries; // Trả về danh sách rỗng nếu có lỗi trong việc chuyển đổi ngày
+        }
+        // Câu truy vấn SQL
+        String q = "SELECT " + TABLE_NAME_SERVICE  + "." + COLUMN_NAME_SERVICE  + ", " +
+                "SUM(" +
+                TABLE_NAME_BILL + "." + COLUMN_TOTAL_PRICE_BILL + " + " +
+                TABLE_NAME_BILL_DETAIL + "." + COLUMN_TOTAL_PRICE_DETAIL + " + " +
+                TABLE_NAME_SERVICE + "." + COLUMN_QUANTITY_SERVICE + " + " +
+                TABLE_NAME_STADIUM + "." + COLUMN_PRICE_STADIUM + ") as 'total' " +
+                " FROM " + TABLE_NAME_BILL +
+                " INNER JOIN " + TABLE_NAME_STADIUM +
+                " ON " + TABLE_NAME_BILL + "." + COLUMN_ID_STADIUM_BILL + " = " + TABLE_NAME_STADIUM + "." + COLUMN_ID_STADIUM +
+                " INNER JOIN " + TABLE_NAME_BILL_DETAIL +
+                " ON " + TABLE_NAME_BILL + "." + COLUMN_ID_BILL + " = " + TABLE_NAME_BILL_DETAIL + "." + COLUMN_ID_BILL_DETAIL +
+                " INNER JOIN " + TABLE_NAME_SERVICE +
+                " ON " + TABLE_NAME_BILL_DETAIL + "." + COLUMN_ID_BILL_DETAIL_SERVICE + " = " + TABLE_NAME_SERVICE + "." + COLUMN_ID_SERVICE +
+                " WHERE " + TABLE_NAME_BILL + "." + COLUMN_DATE_BILL + " BETWEEN '" + time1 + "' AND '" + time2 + "' " +  // Thêm dấu nháy đơn quanh ngày
+                " GROUP BY " + TABLE_NAME_SERVICE + "." + COLUMN_NAME_SERVICE + ", " + TABLE_NAME_BILL_DETAIL + "." + COLUMN_ID_BILL_DETAIL_SERVICE +
+                " HAVING " + TABLE_NAME_BILL + "." + COLUMN_CHECK + " = 1";
+
+        Cursor cursor = db.rawQuery(q, null);
+        if (cursor.moveToFirst()) {
+            do {
+                String name = cursor.getString(0);
+                int value = cursor.getInt(1);
+                pieEntries.add(new PieEntry(value, name));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return pieEntries;
+    }
+
+    public boolean forget_pass(String email_or_phone) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + TABLE_NAME_USER + " WHERE " + COLUMN_EMAIL_USER + " = ?" ;
+        Cursor cursor = db.rawQuery(query, new String[]{email_or_phone});
+        boolean exists = (cursor.getCount() > 0);
+        cursor.close();
+        db.close();
+        return exists;
+    }
+    public String get_phone(String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT " + COLUMN_PHONE_NUMBER_USER + " FROM " + TABLE_NAME_USER + " WHERE " + COLUMN_EMAIL_USER + " = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{email});
+        String phone = "";
+        if (cursor.moveToFirst()) {
+            phone = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PHONE_NUMBER_USER));
+        }
+        cursor.close();
+        db.close();
+        return phone;
+    }
+
+
+
+
 }

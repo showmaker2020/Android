@@ -87,6 +87,13 @@ public class Log_in extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        binding.forgotPass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), Forget.class);
+                startActivity(intent);
+            }
+        });
     }
     void display(){
         Cursor cs = database.getdata_bill_detail();
@@ -100,4 +107,5 @@ public class Log_in extends AppCompatActivity {
             }
         }
     };
+
 }

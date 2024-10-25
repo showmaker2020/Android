@@ -5,18 +5,18 @@
     android:layout_height="match_parent"
     tools:context=".LibraryFragment">
     <TextView
-        android:id="@+id/text_view"
+        android:id="@+id/text_view_billpay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Bill Fragment"
+        android:text="Bill pay Fragment"
         android:gravity="center"
         android:textSize="30sp"
         android:textColor="@color/lavender"
         android:layout_alignParentTop="true"/>
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViews"
+        android:id="@+id/recyclerViews_billpay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/text_view"
+        android:layout_below="@id/text_view_billpay"
         android:orientation="vertical" />
 </RelativeLayout>

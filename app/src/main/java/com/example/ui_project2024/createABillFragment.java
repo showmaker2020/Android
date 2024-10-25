@@ -11,24 +11,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.ui_project2024.Adapter.Bill_Adapter; // Sử dụng BillAdapter mới
+import com.example.ui_project2024.Adapter.Bill_Adapter;
 import com.example.ui_project2024.DB_Manager.Data_Stadium;
-import com.example.ui_project2024.List.List_Bill;
 import com.example.ui_project2024.List.List_Bill_Items;
 
 import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
+ * Use the {@link createABillFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class LibraryFragment extends Fragment {
-
+public class createABillFragment extends Fragment {
     private ArrayList<List_Bill_Items> billList;
-
-    public LibraryFragment() {
-    }
-
 
     public static LibraryFragment newInstance(String name, String phone, String sevrice, String timePick, String timeReturn, int total, int status) {
         LibraryFragment fragment = new LibraryFragment();
@@ -49,24 +44,16 @@ public class LibraryFragment extends Fragment {
         super.onCreate(savedInstanceState);
         Data_Stadium dataStadium = new Data_Stadium(getContext());
         billList = dataStadium.getAllBills();
-//        billList.add(new List_Bill("Hóa đơn 1", "Địa chỉ 1", R.drawable.aklogo_1));
-//        billList.add(new List_Bill("Hóa đơn 2", "Địa chỉ 2", R.drawable.aklogo_1));
-
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_library, container, false);
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_create_a_bill, container, false);
         TextView textView = view.findViewById(R.id.text_view);
         RecyclerView recyclerView = view.findViewById(R.id.recyclerViews);
-        textView.setText("Danh sách hóa đơn");
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        Bill_Adapter billAdapter = new Bill_Adapter(getContext(), billList);
-        recyclerView.setAdapter(billAdapter);
+        textView.setText("tao bill");
         return view;
     }
-
-
 }
