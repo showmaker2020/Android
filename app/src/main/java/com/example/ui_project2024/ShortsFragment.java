@@ -62,8 +62,11 @@ public class ShortsFragment extends Fragment {
         @SuppressLint({"MissingInflatedId", "LocalSuppress"})
         ImageButton imgbtn = view.findViewById(R.id.search_btn);
         Spinner spinner = view.findViewById(R.id.spinner_selection);
+        String selectedItem = spinner.getSelectedItem().toString();
+        Log.d("aaa", spinner.getItemAtPosition(0).toString());
+        Log.d("aaa", spinner.getItemAtPosition(1).toString());
         // Log.d("SpinnerCheck", "Selected item: " + spinner.getSelectedItem().toString());
-        if(spinner.getSelectedItem().toString().equalsIgnoreCase("Stadium")){
+        if(selectedItem.equals(spinner.getItemAtPosition(0))){
             imgbtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -83,7 +86,7 @@ public class ShortsFragment extends Fragment {
                     time2.setText("");
                 }
             });
-        } else {
+        } else if(selectedItem.equals(spinner.getItemAtPosition(1))){
             imgbtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.ui_project2024.DB_Manager.Data_Stadium;
 import com.example.ui_project2024.List.List_Bill;
 import com.example.ui_project2024.List.List_Bill_Items;
 import com.example.ui_project2024.R;
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 
 public class Bill_Adapter extends RecyclerView.Adapter<Bill_Adapter.ViewHolder> {
     private final ArrayList<List_Bill_Items> billList;
+    private Data_Stadium db;
     Activity activity;
     private final Context context;
     public Bill_Adapter(Context context, ArrayList<List_Bill_Items> billList) {
@@ -42,6 +44,7 @@ public class Bill_Adapter extends RecyclerView.Adapter<Bill_Adapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         List_Bill_Items listData = billList.get(position);
+        db = new Data_Stadium(context);
         if (listData != null) {
             holder.id.setText(listData.getId_bill());
             holder.name.setText(listData.getName());
@@ -60,14 +63,24 @@ public class Bill_Adapter extends RecyclerView.Adapter<Bill_Adapter.ViewHolder> 
                 holder.status.setChecked(true);
                 holder.string.setText("Đã thanh toán");
             }
-        }
-        holder.btn_thanh_toan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context, pay_money.class);
-                context.startActivity(intent);
+            if (db.check_bill(holder.id.getText().toString()) == 1) {
+                holder.btn_thanh_toan.setText("Đã thanh toán");
+                holder.btn_thanh_toan.setEnabled(false);
+            } else {
+                holder.btn_thanh_toan.setText("Thanh toán");
+                holder.btn_thanh_toan.setEnabled(true);
+                holder.btn_thanh_toan.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(context, pay_money.class);
+                        intent.putExtra("id", holder.id.getText().toString());
+                        context.startActivity(intent);
+                    }
+                });
             }
-        });
+
+        }
+
     }
 
     @Override

@@ -5,7 +5,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string-array name="options_array">
-        <item>Stadium</item>
-        <item>Service</item>
+        <item name="Stadium">Stadium</item>
+        <item name="Service">Service</item>
     </string-array>
 </resources>

@@ -22,7 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAlignment="viewStart"
-            android:text="Create"
+            android:text="Information"
             android:padding="8dp"
             android:textColor="@color/lavender"
             android:layout_marginStart="12dp"
@@ -78,7 +78,6 @@
             android:textColor="@color/lavender"
             android:layout_marginLeft="30dp"
             android:textSize="16sp"/>
-
     </LinearLayout>
     <LinearLayout
         android:id="@+id/layoutLive"
@@ -98,6 +97,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Bill pay"
+            android:textColor="@color/lavender"
+            android:layout_marginLeft="30dp"
+            android:textSize="16sp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/layoutUser"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+        <ImageView
+            android:background="@color/lavender"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/user"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="User"
             android:textColor="@color/lavender"
             android:layout_marginLeft="30dp"
             android:textSize="16sp"/>

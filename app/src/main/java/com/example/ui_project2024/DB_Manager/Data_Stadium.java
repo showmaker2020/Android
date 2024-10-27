@@ -805,4 +805,19 @@ public class Data_Stadium extends SQLiteOpenHelper {
         db.update(TABLE_NAME_USER, cv, COLUMN_EMAIL_USER + " = " + "'" + email + "'", null);
     }
 
+    public void update_check_bill(String id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COLUMN_CHECK, 1);
+        db.update(TABLE_NAME_BILL, cv, COLUMN_ID_BILL + " = " + "'" + id + "'", null);
+    }
+
+    public int check_bill(String id){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String q = "SELECT " + COLUMN_CHECK +" FROM " + TABLE_NAME_BILL + " WHERE " + COLUMN_ID_BILL + " = '" + id + "'";
+        Cursor cs = db.rawQuery(q, null);
+        if (cs.moveToFirst())  return cs.getInt(0);
+        return 0;
+    }
+
 }

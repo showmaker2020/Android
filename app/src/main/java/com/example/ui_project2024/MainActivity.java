@@ -126,35 +126,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 showBottomDialog();
             }
         });
-        nav.setNavigationItemSelectedListener(item -> {
-            Log.d("NavigationClick", "Item selected: " + item.getItemId());
-            switch (item.getItemId()) {
-                case R.id.nav_home:
-                    replaceFragment(new HomeFragment());
-                    break;
-                case R.id.nav_settings:
-                    replaceFragment(new SettingsFragment());
-                    break;
-                case R.id.nav_share:
-                    replaceFragment(new ShareFragment());
-                    break;
-                case R.id.nav_about:
-                    replaceFragment(new AboutFragment());
-                    break;
-                case R.id.nav_logout:
-                    Log.d("aaa", "Log out is Clicked");
-                    getSharedPreferences("USER_PREF", MODE_PRIVATE)
-                            .edit()
-                            .putBoolean("isLoggedIn", false)
-                            .apply();
-                    Intent intent = new Intent(MainActivity.this, Log_in.class);
-                    startActivity(intent);
-                    finish();
-                    Log.d("aaa", "Log out: thành công!!!");
-                    break;
-            }
-            return false;
-        });
     }
 
     private void replaceFragment(Fragment fragment) {
@@ -170,6 +141,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         LinearLayout videoLayout = dialog.findViewById(R.id.layoutVideo);
         LinearLayout shortsLayout = dialog.findViewById(R.id.layoutShorts);
         LinearLayout liveLayout = dialog.findViewById(R.id.layoutLive);
+        LinearLayout userLayout = dialog.findViewById(R.id.layoutUser);
         ImageView cancelButton = dialog.findViewById(R.id.cancelButton);
         videoLayout.setOnClickListener(v -> {
             dialog.dismiss();
@@ -203,6 +175,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             int status = 0;
             Bill_payFragment libraryFragment = Bill_payFragment.newInstance(name, phone, sevrice, time_pick, time_return, total, status);
             replaceFragment(libraryFragment);
+        });
+        userLayout.setOnClickListener(v ->{
+            dialog.dismiss();
+            Log.d("aaa", "Bill is Clicked");
+            UsersFragment userFragment = new UsersFragment();
+            replaceFragment(userFragment);
         });
         cancelButton.setOnClickListener(view -> dialog.dismiss());
         dialog.show();
@@ -240,7 +218,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Log.d("aaa", "Log out: thành công!!!");
                 break;
         }
-        return false;
+        drawer.closeDrawer(GravityCompat.START);  // Đóng ngăn kéo sau khi chọn item
+        return true;
     }
 
 }
