@@ -51,7 +51,7 @@ public class Data_Stadium extends SQLiteOpenHelper {
 //  -tongTienDV
     private Context context;
     private static final String DB_NAME = "Stadium.db";
-    private static final int VERSION = 1;
+    private static final int VERSION = 2;
     // user
     private static final String TABLE_NAME_USER = "user";
     private static final String COLUMN_NAME_USER = "column_name_user";
@@ -93,6 +93,7 @@ public class Data_Stadium extends SQLiteOpenHelper {
     private static final String TABLE_NAME_BILL_DETAIL = "bill_detail";
     private static final String COLUMN_ID_BILL_DETAIL = "column_id_bill_detail";
     private static final String COLUMN_ID_BILL_DETAIL_SERVICE = "column_id_bill_detail_service";
+    private static final String COLUMN_NUMBER_SERVICE = "column_number_service";
     private static final String COLUMN_TOTAL_PRICE_DETAIL = "column_total_price_detail";
 
 
@@ -150,6 +151,7 @@ public class Data_Stadium extends SQLiteOpenHelper {
         String CREATE_TABLE_BILL_DETAIL = "CREATE TABLE " + TABLE_NAME_BILL_DETAIL + " (" +
                 COLUMN_ID_BILL_DETAIL + " TEXT PRIMARY KEY, " +
                 COLUMN_ID_BILL_DETAIL_SERVICE + " TEXT, " +
+                COLUMN_NUMBER_SERVICE + " INTEGER, " +
                 COLUMN_TOTAL_PRICE_DETAIL + " INTEGER, " +
                 "FOREIGN KEY (" + COLUMN_ID_BILL_DETAIL_SERVICE + ") REFERENCES " + TABLE_NAME_SERVICE + "(" + COLUMN_ID_SERVICE + "), " +
                 "FOREIGN KEY (" + COLUMN_ID_BILL_DETAIL + ") REFERENCES " + TABLE_NAME_BILL + "(" + COLUMN_ID_BILL + ")" +
@@ -157,14 +159,79 @@ public class Data_Stadium extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_BILL_DETAIL);
     }
 
+    public void logAllBillDetail() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + TABLE_NAME_BILL_DETAIL;
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                String idBillDetail = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ID_BILL_DETAIL));
+                String idBillDetailService = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ID_BILL_DETAIL_SERVICE));
+                // int numberService = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_NUMBER_SERVICE));
+                int totalPriceDetail = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_TOTAL_PRICE_DETAIL));
+
+                Log.d("BILL_DETAIL", "ID_BILL_DETAIL: " + idBillDetail + ", " +
+                        "ID_BILL_DETAIL_SERVICE: " + idBillDetailService + ", " +
+                        "NUMBER_SERVICE: ?"  +
+                        "TOTAL_PRICE_DETAIL: " + totalPriceDetail);
+
+            } while (cursor.moveToNext());
+        } else {
+            Log.d("BILL_DETAIL", "No data found in BILL_DETAIL table.");
+        }
+
+        cursor.close();
+        db.close();
+    }
+
+
+//    @Override
+//    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+//        db.execSQL("drop Table if exists " + TABLE_NAME_USER);
+//        db.execSQL("drop Table if exists " + TABLE_NAME_STADIUM);
+//        db.execSQL("drop Table if exists " + TABLE_NAME_BILL);
+//        db.execSQL("drop Table if exists " + TABLE_NAME_SERVICE);
+//        db.execSQL("drop Table if exists " + TABLE_NAME_BILL_DETAIL);
+//    }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("drop Table if exists " + TABLE_NAME_USER);
-        db.execSQL("drop Table if exists " + TABLE_NAME_STADIUM);
-        db.execSQL("drop Table if exists " + TABLE_NAME_BILL);
-        db.execSQL("drop Table if exists " + TABLE_NAME_SERVICE);
-        db.execSQL("drop Table if exists " + TABLE_NAME_BILL_DETAIL);
+
+        if (oldVersion < 2) {
+            db.execSQL("ALTER TABLE " + TABLE_NAME_BILL_DETAIL + " ADD COLUMN " + COLUMN_NUMBER_SERVICE + " INTEGER DEFAULT 0");
+
+        }
+
     }
+
+    public void checkColumnExists(SQLiteDatabase db, String tableName, String columnName) {
+        Cursor cursor = db.rawQuery("PRAGMA table_info(" + tableName + ")", null);
+        boolean columnExists = false;
+
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                String currentColumn = cursor.getString(cursor.getColumnIndexOrThrow("name"));
+                if (currentColumn.equals(columnName)) {
+                    columnExists = true;
+                    break;
+                }
+            }
+            cursor.close();
+        }
+
+        if (columnExists) {
+            Log.d("DatabaseCheck", "Cột '" + columnName + "' đã tồn tại trong bảng '" + tableName + "'.");
+        } else {
+            Log.d("DatabaseCheck", "Cột '" + columnName + "' chưa được thêm vào bảng '" + tableName + "'.");
+        }
+    }
+
+    public void checkTableExists() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        db = this.getReadableDatabase();
+        checkColumnExists(db, TABLE_NAME_BILL_DETAIL, COLUMN_NUMBER_SERVICE);
+    }
+
 
     public void ExData(String s){
         SQLiteDatabase db = this.getWritableDatabase();
@@ -217,8 +284,8 @@ public class Data_Stadium extends SQLiteOpenHelper {
     // check lai neu lam xong
     public boolean verifyOTP(String email, String otp) {
         SQLiteDatabase db = this.getReadableDatabase();
-        String q = "SELECT " + COLUMN_OTP_USER + " FROM " + TABLE_NAME_USER + " WHERE " + COLUMN_EMAIL_USER + "=?";
-        Cursor cursor = db.rawQuery(q, new String[]{email});
+        String q = "SELECT " + COLUMN_OTP_USER + " FROM " + TABLE_NAME_USER + " WHERE " + COLUMN_EMAIL_USER + " = " + "'" + email + "'";
+        Cursor cursor = db.rawQuery(q, null);
         if (cursor != null) {
             if (cursor.moveToNext()) {
                 @SuppressLint("Range")
@@ -235,18 +302,31 @@ public class Data_Stadium extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_CHECK_USER, 1);
-        db.update(TABLE_NAME_USER, contentValues, COLUMN_EMAIL_USER + "=?", new String[]{email});
+        db.update(TABLE_NAME_USER, contentValues, COLUMN_EMAIL_USER + " = " + "'" + email + "'", null);
         db.close();
     }
     public boolean onSubmitOtpClicked(String email, String inputOtp) {
         SQLiteDatabase dbHelper = this.getWritableDatabase();
         boolean isOtpValid = verifyOTP(email, inputOtp);
-        if (!isOtpValid) {
+        if (isOtpValid) {
             SQLiteDatabase db = this.getWritableDatabase();
             ContentValues contentValues = new ContentValues();
             contentValues.put(COLUMN_CHECK_USER, 1);
-            db.update(TABLE_NAME_USER, contentValues, COLUMN_EMAIL_USER + "=?", new String[]{email});
+            db.update(TABLE_NAME_USER, contentValues, COLUMN_EMAIL_USER + " = " + "'" + email + "'", null);
             db.close();
+            Log.d("aaa", "Ma otp dung");
+            return true;
+        } else {
+            // Thông báo lỗi OTP không đúng
+            Log.d("aaa", "Ma otp khong dung");
+            return false;
+        }
+    }
+
+    public boolean onSubmitOtpClicked2(String email, String inputOtp) {
+        SQLiteDatabase dbHelper = this.getWritableDatabase();
+        boolean isOtpValid = verifyOTP(email, inputOtp);
+        if (isOtpValid) {
             Log.d("aaa", "Ma otp dung");
             return true;
         } else {
@@ -520,7 +600,6 @@ public class Data_Stadium extends SQLiteOpenHelper {
         cursor.close();
         return billList;
     }
-
     public ArrayList<List_Bill_Items> getnoBillsPayment() {
         ArrayList<List_Bill_Items> billList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -620,7 +699,6 @@ public class Data_Stadium extends SQLiteOpenHelper {
         ArrayList<PieEntry> pieEntries = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
-        // Chuyển đổi time1 và time2 sang định dạng yyyy-MM-dd
         SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
@@ -689,7 +767,42 @@ public class Data_Stadium extends SQLiteOpenHelper {
         return phone;
     }
 
+//    public void updateAllUserCheckColumn() {
+//        SQLiteDatabase db = this.getWritableDatabase();
+//
+//        db.execSQL("UPDATE " + TABLE_NAME_USER + " SET " +  COLUMN_CHECK_USER + " = " +1);
+//
+//        Log.d("updateAllUserCheckColumn", "All rows updated with check_column = 1");
+//    }
 
+    public void check_column_all_user(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String q = "SELECT " + COLUMN_EMAIL_USER + "," +COLUMN_CHECK_USER + " FROM " + TABLE_NAME_USER;
+        Cursor cs = db.rawQuery(q, null);
+        if (cs.moveToFirst()){
+            do {
+                String email = cs.getString(0);
+                int check = cs.getInt(1);
+                Log.d("check_column_all_user", "email: " + email + " check: " + check);
+            } while (cs.moveToNext());
+        }
 
+    }
+    public int check_user_forgot(String email){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String q = "SELECT " + COLUMN_CHECK_USER +" FROM " + TABLE_NAME_USER + " WHERE " + COLUMN_EMAIL_USER + " = '" + email + "'";
+        Cursor cs = db.rawQuery(q, null);
+        if (cs.moveToFirst()) {
+            return cs.getInt(0);
+        }
+        return 0;
+    }
+
+    public void updatepass(String email, String pass){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COLUMN_PASSWORD_USER, pass);
+        db.update(TABLE_NAME_USER, cv, COLUMN_EMAIL_USER + " = " + "'" + email + "'", null);
+    }
 
 }

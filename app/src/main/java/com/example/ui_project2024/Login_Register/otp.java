@@ -31,7 +31,7 @@ import com.google.android.material.internal.TextWatcherAdapter;
 public class otp extends AppCompatActivity {
     EditText otp1, otp2, otp3, otp4;
     TextView resend, emailotp, otpphone;
-    Data_Stadium database;
+    Data_Stadium database = null;
     private boolean resendEnable = false;
     private int resendTime = 60;
     private int selectotppos = 0;
@@ -45,6 +45,7 @@ public class otp extends AppCompatActivity {
         otp2 = findViewById(R.id.otp2);
         otp3 = findViewById(R.id.otp3);
         otp4 = findViewById(R.id.otp4);
+        database = new Data_Stadium(this);
         resend = findViewById(R.id.resendotp);
         emailotp = findViewById(R.id.otp_email);
         otpphone = findViewById(R.id.phone_otp);
@@ -57,7 +58,6 @@ public class otp extends AppCompatActivity {
         otp2.addTextChangedListener(textWatcher);
         otp3.addTextChangedListener(textWatcher);
         otp4.addTextChangedListener(textWatcher);
-
         startcounttime();
         resend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,13 +73,23 @@ public class otp extends AppCompatActivity {
                 final String genOtp = otp1.getText().toString() + otp2.getText().toString()
                         + otp3.getText().toString() + otp4.getText().toString();
                 Log.d("aaa", genOtp);
-                if(genOtp.length() == 4){
-                    database = new Data_Stadium(otp.this);
-                    if(database.onSubmitOtpClicked(String.valueOf(emailotp), genOtp)){
-                        database.updateCheckColumn(String.valueOf(emailotp));
+                int check_forget = database.check_user_forgot(getemail);
+                String emailotp_string = emailotp.getText().toString().trim();
+                if(check_forget == 0 && genOtp.length() == 4){
+                    if(database.onSubmitOtpClicked(emailotp_string, genOtp)){
+                        database.updateCheckColumn(emailotp_string);
                         Log.d("aaa", "Ma otp hop le");
                         Intent intent = new Intent(getApplicationContext(), Log_in.class);
                         startActivity(intent);
+                    } else {
+                        Log.d("aaa", "Ma otp khong hop le");
+                    }
+                } else if(check_forget == 1 && genOtp.length() == 4){
+                    if(database.onSubmitOtpClicked2(emailotp_string, genOtp)){
+                        Log.d("aaa", "Ma otp hop le");
+                        Intent i = new Intent(otp.this, pass_forget_reset.class);
+                        i.putExtra("email", emailotp_string);
+                        startActivity(i);
                     } else {
                         Log.d("aaa", "Ma otp khong hop le");
                     }
@@ -103,9 +113,7 @@ public class otp extends AppCompatActivity {
             @Override
             public void onTick(long millisUntilFinished) {
                 resend.setText("Resend code (" + (millisUntilFinished/1000) + ")");
-
             }
-
             @Override
             public void onFinish() {
                 resendEnable = true;

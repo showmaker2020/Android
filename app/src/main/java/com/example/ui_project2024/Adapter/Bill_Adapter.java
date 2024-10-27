@@ -1,25 +1,31 @@
 package com.example.ui_project2024.Adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ui_project2024.List.List_Bill;
 import com.example.ui_project2024.List.List_Bill_Items;
 import com.example.ui_project2024.R;
+import com.example.ui_project2024.pay_money;
 
 import java.util.ArrayList;
 
 public class Bill_Adapter extends RecyclerView.Adapter<Bill_Adapter.ViewHolder> {
     private final ArrayList<List_Bill_Items> billList;
+    Activity activity;
     private final Context context;
     public Bill_Adapter(Context context, ArrayList<List_Bill_Items> billList) {
         this.context = context;
@@ -46,7 +52,22 @@ public class Bill_Adapter extends RecyclerView.Adapter<Bill_Adapter.ViewHolder> 
             holder.time_return.setText(listData.getReturn_time());
             holder.total.setText(String.valueOf(listData.getTotal()));
             // holder.status.setText(String.valueOf(listData.getStatus()));
+            int status_check = listData.getStatus();
+            if(status_check == 0){
+                holder.status.setChecked(false);
+                holder.string.setText("Chưa thanh toán");
+            }else{
+                holder.status.setChecked(true);
+                holder.string.setText("Đã thanh toán");
+            }
         }
+        holder.btn_thanh_toan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, pay_money.class);
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -55,6 +76,7 @@ public class Bill_Adapter extends RecyclerView.Adapter<Bill_Adapter.ViewHolder> 
     }public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView id, name, phone, id_stadium,date,  time_pick, time_return, total, string;
         Switch status;
+        Button btn_thanh_toan;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             id = itemView.findViewById(R.id.tv_list_id_bill);
@@ -67,27 +89,7 @@ public class Bill_Adapter extends RecyclerView.Adapter<Bill_Adapter.ViewHolder> 
             total = itemView.findViewById(R.id.tv_list_bill_total);
             status = itemView.findViewById(R.id.switch_list_bill_status);
             string = itemView.findViewById(R.id.tv_list_bill_status_text);
-//            Log.d("Bill_Adapter", "ViewHolder created: " + status.getText().toString());
-//            String statusText = status.getText().toString().trim();
-//            if (!statusText.isEmpty()) {
-//                try {
-//                    int statusValue = Integer.parseInt(statusText);
-//                    if (statusValue == 0) {
-//                        status.setChecked(false);
-//                        string.setText("Chưa thanh toán");
-//                    } else {
-//                        status.setChecked(true);
-//                        string.setText("Đã thanh toán");
-//                    }
-//                } catch (NumberFormatException e) {
-//                    status.setChecked(false);
-//                    string.setText("Dữ liệu không hợp lệ");
-//                }
-//            } else {
-//                status.setChecked(false);
-//                string.setText("Trạng thái không xác định");
-//            }
-
+            btn_thanh_toan = itemView.findViewById(R.id.btn_thanhtoan);
         }
 
 

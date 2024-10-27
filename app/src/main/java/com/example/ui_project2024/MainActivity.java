@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -42,12 +43,11 @@ import java.util.Objects;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     FloatingActionButton fab;
     DrawerLayout drawer;
-
     Data_Stadium db;
     BottomNavigationView bottomNavigationView;
     NavigationView nav;
-
     ActivityMainBinding binding;
+    TextView nav_header;
 
     @SuppressLint({"CutPasteId", "MissingInflatedId", "NonConstantResourceId"})
     @Override
@@ -64,7 +64,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Nếu đã đăng nhập, tiếp tục xử lý trong MainActivity
         setContentView(R.layout.activity_main);
         db = new Data_Stadium(this);
-
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         fab = findViewById(R.id.fab);
         drawer = findViewById(R.id.drawer_layout);
@@ -86,6 +85,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             switch (item.getItemId()) {
                 case R.id.home:
                     Log.d("aaa", "Home is Clicked");
+                    String name_email = getIntent().getStringExtra("email");
+                    nav_header = findViewById(R.id.nav_header);
+                    nav_header.setText(name_email);
+                    Log.d("aaa: ", "Home is Clicked: " + name_email);
                     replaceFragment(new HomeFragment());
                     break;
                 case R.id.chart:
@@ -238,15 +241,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
         }
         return false;
-    }
-    public void getdataindatabase(){
-        String name ="";
-        String phone = "";
-        String sevrice = "";
-        String time_pick = "";
-        String time_return = "";
-        int total = 0;
-        int status = 0;
     }
 
 }

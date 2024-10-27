@@ -72,7 +72,8 @@ public class Log_in extends AppCompatActivity {
                     if(checkCredentials == true){
                         Log.d("aaa", "Login successful");
                         Intent intent  = new Intent(getApplicationContext(), MainActivity.class);
-                        display();
+                        intent.putExtra("email", email);
+                        // display();
                         startActivity(intent);
                     }else{
                         Log.d("aaa", "Login failed");

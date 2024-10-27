@@ -234,11 +234,11 @@
                         android:layout_weight="0.5"
                         android:layout_height="wrap_content" />
                     <Button
-                        android:id="@+id/btn_sua_stadium"
+                        android:id="@+id/btn_thanhtoan"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Sửa"
+                        android:text="Thanh Toan"
                         android:minWidth="60dp"
                         android:padding="10dp"
                         android:textSize="12sp" />

@@ -29,7 +29,6 @@ import com.example.ui_project2024.databinding.ActivityRegisterBinding;
 
 public class Register extends AppCompatActivity {
     ActivityRegisterBinding binding;
-    Mydatabase_Login_register db;
     Data_Stadium database;
     private boolean passshow = false;
     private boolean passconfirmShow = false;
@@ -81,7 +80,6 @@ public class Register extends AppCompatActivity {
                 passEtConfirm.setSelection(passEtConfirm.getText().length());
             }
         });
-        db = new Mydatabase_Login_register(this);
         database = new Data_Stadium(this);
         binding.singupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
