@@ -51,9 +51,9 @@ public class createABillFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_create_a_bill, container, false);
-        TextView textView = view.findViewById(R.id.text_view);
-        RecyclerView recyclerView = view.findViewById(R.id.recyclerViews);
-        textView.setText("tao bill");
+//        TextView textView = view.findViewById(R.id.text_view);
+//        RecyclerView recyclerView = view.findViewById(R.id.recyclerViews);
+//        textView.setText("tao bill");
         return view;
     }
 }

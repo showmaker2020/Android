@@ -66,47 +66,47 @@ public class ShortsFragment extends Fragment {
         Log.d("aaa", spinner.getItemAtPosition(0).toString());
         Log.d("aaa", spinner.getItemAtPosition(1).toString());
         // Log.d("SpinnerCheck", "Selected item: " + spinner.getSelectedItem().toString());
-        if(selectedItem.equals(spinner.getItemAtPosition(0))){
-            imgbtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    String date1 = time1.getText().toString();
-                    String date2 = time2.getText().toString();
-                    Data_Stadium db = new Data_Stadium(getActivity());
-                    ArrayList<PieEntry> entries = db.getchart(date1, date2);
-                    PieDataSet dataSet = new PieDataSet(entries, "Các sân vận động");
-                    dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
-                    pieChart.setCenterText("Biểu đồ phần trăm tu Staidum\n " + date1 + " to " + date2);
-                    PieData data = new PieData(dataSet);
-                    data.setValueFormatter(new PercentFormatter(pieChart));
-                    pieChart.setUsePercentValues(true);
-                    pieChart.setData(data);
-                    pieChart.invalidate();
-                    time1.setText("");
-                    time2.setText("");
+        imgbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String date1 = time1.getText().toString();
+                String date2 = time2.getText().toString();
+
+                // Kiểm tra các trường hợp null hoặc rỗng
+                if (date1.isEmpty() || date2.isEmpty()) {
+                    Log.d("aaa", "Vui lòng nhập đầy đủ ngày");
+                    return;
                 }
-            });
-        } else if(selectedItem.equals(spinner.getItemAtPosition(1))){
-            imgbtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    String date1 = time1.getText().toString();
-                    String date2 = time2.getText().toString();
-                    Data_Stadium db = new Data_Stadium(getActivity());
-                    ArrayList<PieEntry> entries_service = db.getServiceDetails(date1, date2);
-                    PieDataSet dataSet = new PieDataSet(entries_service, "Các dich vu");
-                    dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+
+                Data_Stadium db = new Data_Stadium(getActivity());
+                ArrayList<PieEntry> entries;
+                PieDataSet dataSet;
+                if (selectedItem.equals(spinner.getItemAtPosition(0))) {
+                    // Lấy dữ liệu cho biểu đồ sân vận động
+                    entries = db.getchart(date1, date2);
+                     dataSet = new PieDataSet(entries, "Các sân vận động");
+                    pieChart.setCenterText("Biểu đồ phần trăm tu Stadium\n " + date1 + " to " + date2);
+                } else {
+                    // Lấy dữ liệu cho biểu đồ dịch vụ
+                    entries = db.getServiceDetails(date1, date2);
+                    dataSet = new PieDataSet(entries, "Các dịch vụ");
                     pieChart.setCenterText("Biểu đồ phần trăm tu Service\n " + date1 + " to " + date2);
-                    PieData data = new PieData(dataSet);
-                    data.setValueFormatter(new PercentFormatter(pieChart));
-                    pieChart.setUsePercentValues(true);
-                    pieChart.setData(data);
-                    pieChart.invalidate();
-                    time1.setText("");
-                    time2.setText("");
                 }
-            });
-        }
+
+                // Thiết lập màu sắc và dữ liệu cho biểu đồ
+                dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+                PieData data = new PieData(dataSet);
+                data.setValueFormatter(new PercentFormatter(pieChart));
+                pieChart.setUsePercentValues(true);
+                pieChart.setData(data);
+                pieChart.invalidate(); // Cập nhật biểu đồ
+
+                // Xóa dữ liệu đã nhập
+                time1.setText("");
+                time2.setText("");
+            }
+        });
+
         time1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

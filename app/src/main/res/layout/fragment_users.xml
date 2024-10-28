@@ -29,13 +29,36 @@
         android:textColor="@android:color/black"
         android:paddingTop="8dp" />
 
-    <TextView
-        android:id="@+id/edit_name_profile"
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Nguyễn Văn A"
-        android:textSize="16sp"
-        android:textColor="@android:color/darker_gray" />
+        android:layout_height="35dp"
+        android:orientation="horizontal"
+        android:padding="8dp">
+        <TextView
+            android:id="@+id/edit_name_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nguyễn Văn A"
+            android:textSize="16sp"
+            android:textColor="@android:color/darker_gray" />
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/chage_name_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thay đổi"
+            android:textSize="16sp"
+            android:textColor="@color/primary" />
+
+
+    </LinearLayout>
+
+
 
     <!-- Email -->
     <TextView
@@ -67,6 +90,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
+        <TextView
+            android:id="@+id/chage_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thay đổi"
+            android:textSize="16sp"
+            android:paddingRight="10dp"
+            android:textColor="@color/primary" />
 
         <!-- Display TextView -->
         <TextView
@@ -75,7 +106,7 @@
             android:layout_height="wrap_content"
             android:text="Hiển thị"
             android:textSize="16sp"
-            android:textColor="@android:color/black" />
+            android:textColor="@color/primary" />
     </LinearLayout>
 
     <!-- Phone Number -->
@@ -110,12 +141,20 @@
 
         <!-- Display TextView -->
         <TextView
+            android:id="@+id/chage_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thay đổi"
+            android:textSize="16sp"
+            android:paddingRight="10dp"
+            android:textColor="@color/primary" />
+        <TextView
             android:id="@+id/show_phone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Hiển thị"
             android:textSize="16sp"
-            android:textColor="@android:color/black" />
+            android:textColor="@color/primary" />
     </LinearLayout>
 
     <TextView
@@ -154,7 +193,7 @@
             android:layout_height="wrap_content"
             android:text="Hiển thị"
             android:textSize="16sp"
-            android:textColor="@android:color/black" />
+            android:textColor="@color/primary" />
     </LinearLayout>
 
     <!-- Change Password Button -->

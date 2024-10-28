@@ -54,14 +54,14 @@ public class Bill_payFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_bill_pay, container, false);
-        @SuppressLint({"MissingInflatedId", "LocalSuppress"})
-        TextView textView = view.findViewById(R.id.text_view_billpay);
-        @SuppressLint({"MissingInflatedId", "LocalSuppress"})
-        RecyclerView recyclerView = view.findViewById(R.id.recyclerViews_billpay);
-        textView.setText("Danh sách hóa đơn da thanh toan");
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        Bill_Adapter billAdapter = new Bill_Adapter(getContext(), billList);
-        recyclerView.setAdapter(billAdapter);
+//        @SuppressLint({"MissingInflatedId", "LocalSuppress"})
+//        TextView textView = view.findViewById(R.id.text_view_billpay);
+//        @SuppressLint({"MissingInflatedId", "LocalSuppress"})
+//        RecyclerView recyclerView = view.findViewById(R.id.recyclerViews_billpay);
+//        textView.setText("Danh sách hóa đơn da thanh toan");
+//        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+//        Bill_Adapter billAdapter = new Bill_Adapter(getContext(), billList);
+//        recyclerView.setAdapter(billAdapter);
         return view;
     }
 }

@@ -147,12 +147,13 @@ public class Data_Stadium extends SQLiteOpenHelper {
                 COLUMN_QUANTITY_SERVICE + " INTEGER" +
                 ");";
         db.execSQL(CREATE_TABLE_SERVICE);
-
+// bang do day nay
         String CREATE_TABLE_BILL_DETAIL = "CREATE TABLE " + TABLE_NAME_BILL_DETAIL + " (" +
-                COLUMN_ID_BILL_DETAIL + " TEXT PRIMARY KEY, " +
+                COLUMN_ID_BILL_DETAIL + " TEXT, " +
                 COLUMN_ID_BILL_DETAIL_SERVICE + " TEXT, " +
                 COLUMN_NUMBER_SERVICE + " INTEGER, " +
                 COLUMN_TOTAL_PRICE_DETAIL + " INTEGER, " +
+                "PRIMARY KEY ("+COLUMN_ID_BILL_DETAIL+","+COLUMN_ID_BILL_DETAIL_SERVICE+"),"+
                 "FOREIGN KEY (" + COLUMN_ID_BILL_DETAIL_SERVICE + ") REFERENCES " + TABLE_NAME_SERVICE + "(" + COLUMN_ID_SERVICE + "), " +
                 "FOREIGN KEY (" + COLUMN_ID_BILL_DETAIL + ") REFERENCES " + TABLE_NAME_BILL + "(" + COLUMN_ID_BILL + ")" +
                 ");";
@@ -196,12 +197,9 @@ public class Data_Stadium extends SQLiteOpenHelper {
 //    }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
         if (oldVersion < 2) {
             db.execSQL("ALTER TABLE " + TABLE_NAME_BILL_DETAIL + " ADD COLUMN " + COLUMN_NUMBER_SERVICE + " INTEGER DEFAULT 0");
-
         }
-
     }
 
     public void checkColumnExists(SQLiteDatabase db, String tableName, String columnName) {
@@ -472,43 +470,45 @@ public class Data_Stadium extends SQLiteOpenHelper {
                 "('SV004', 'Cap', 1, 30, 30)," +
                 "('SV005', 'Shoes', 1, 100, 100)";
         db.execSQL(c);
-
+        // cu de data do cho ban con lam
+        //thu insert 2 du lieu co chung 1 ma bill di r chay bai
+        // uh
         // insert data into bill detail table
-        String d = "INSERT INTO " + TABLE_NAME_BILL_DETAIL +
-                " (COLUMN_ID_BILL_DETAIL, COLUMN_ID_BILL_DETAIL_SERVICE, COLUMN_TOTAL_PRICE_DETAIL) " +
-                "VALUES " +
-                "('BD001', 'SV001', 100)," +
-                "('BD002', 'SV002', 45)," +
-                "('BD003', 'SV003', 150)," +
-                "('BD004', 'SV004', 30)," +
-                "('BD005', 'SV005', 100)";
-        db.execSQL(d);
+
         Log.d("aaa", "initDB: thanh cong");
+
     }
 
     public void init2DB() {
         SQLiteDatabase db = this.getWritableDatabase();
-        String b = "INSERT INTO " + TABLE_NAME_BILL + " VALUES " +
+        String d = "INSERT INTO " + TABLE_NAME_BILL_DETAIL +
+                " VALUES " +
+                "('BD001', 'SV001' ,2, 100)," +
+                "('BD002', 'SV002', 3,45)," +
+                "('BD001', 'SV003', 5, 150)," +
+                "('BD004', 'SV004', 4, 30)," +
+                "('BD005', 'SV005', 3, 100)";
+        db.execSQL(d);
+
+        String f = "INSERT INTO " + TABLE_NAME_BILL_DETAIL + " VALUES " +
+                "('BD006', 'SV001',2, 100)," +
+                "('BD007', 'SV001',3, 50)," +
+                "('BD008', 'SV003',4, 170)," +
+                "('BD009', 'SV004',5, 90)," +
+                "('BD010', 'SV005',1, 100)";
+        db.execSQL(f);
+        Log.d("aaa", "initDB3: thanh cong");
+    }
+
+    public void init3DB() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String e = "INSERT INTO " + TABLE_NAME_BILL + " VALUES " +
                 "('BD006', 'John Doe', '123456789', 'S001', '2024-10-20', '10:00', '11:30', 250, 1)," +
                 "('BD007', 'Jane Smith', '987654321', 'S002', '2024-10-21', '09:00', '10:30', 230, 1)," +
                 "('BD008', 'Bob Johnson', '456789123', 'S003', '2024-10-22', '9:30', '11:00', 240, 1)," +
                 "('BD009', 'Alice Brown', '321654987', 'S004', '2024-10-23', '14:00', '15:30', 270, 1)," +
                 "('BD010', 'Charlie White', '654987321', 'S005', '2024-10-24', '08:30', '10:00', 280, 1)";
-        db.execSQL(b);
-        Log.d("aaa", "initDB: thanh cong");
-    }
-
-    public void inti3DB(){
-        SQLiteDatabase db = this.getWritableDatabase();
-        String d = "INSERT INTO " + TABLE_NAME_BILL_DETAIL +
-                " (COLUMN_ID_BILL_DETAIL, COLUMN_ID_BILL_DETAIL_SERVICE, COLUMN_TOTAL_PRICE_DETAIL) " +
-                "VALUES " +
-                "('BD006', 'SV001', 100)," +
-                "('BD007', 'SV002', 50)," +
-                "('BD008', 'SV003', 170)," +
-                "('BD009', 'SV004', 90)," +
-                "('BD010', 'SV005', 100)";
-        db.execSQL(d);
+        db.execSQL(e);
         Log.d("aaa", "initDB3: thanh cong");
     }
 
@@ -556,10 +556,12 @@ public class Data_Stadium extends SQLiteOpenHelper {
         cursor.close();
         return billList;
     }
+
+
     public ArrayList<List_Bill_Items> getBillsPayment() {
         ArrayList<List_Bill_Items> billList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        String q = "SELECT " + TABLE_NAME_BILL + "." + COLUMN_ID_BILL + ", " +
+        String Query = "SELECT " + TABLE_NAME_BILL + "." + COLUMN_ID_BILL + ", " +
                 TABLE_NAME_BILL + "." + COLUMN_NAME_CUSTOMER + ", " +
                 TABLE_NAME_BILL + "." + COLUMN_PHONE_CUSTOMER + ", " +
                 TABLE_NAME_BILL + "." + COLUMN_ID_STADIUM_BILL + ", " +
@@ -581,7 +583,7 @@ public class Data_Stadium extends SQLiteOpenHelper {
                 " ON " + TABLE_NAME_BILL_DETAIL + "." + COLUMN_ID_BILL_DETAIL_SERVICE + " = " + TABLE_NAME_SERVICE + "." + COLUMN_ID_SERVICE +
                 " GROUP BY " + TABLE_NAME_BILL + "." + COLUMN_ID_BILL + ", " + TABLE_NAME_STADIUM + "." + COLUMN_PRICE_STADIUM
                 + " HAVING " + TABLE_NAME_BILL + "." + COLUMN_CHECK + " = " + 1;
-        Cursor cursor = db.rawQuery(q , null);
+        Cursor cursor = db.rawQuery(Query , null);
         if (cursor.moveToFirst()) {
             do {
                 String id = cursor.getString(0);
@@ -599,6 +601,32 @@ public class Data_Stadium extends SQLiteOpenHelper {
         }
         cursor.close();
         return billList;
+    }
+
+    public int gettotal(){
+        int total = 0;
+        SQLiteDatabase db = this.getReadableDatabase();
+        String Query = "SELECT SUM(" +
+                TABLE_NAME_BILL + "." + COLUMN_TOTAL_PRICE_BILL + " + " +
+                TABLE_NAME_BILL_DETAIL + "." + COLUMN_TOTAL_PRICE_DETAIL + " + " +
+                "(" + TABLE_NAME_SERVICE + "." + COLUMN_QUANTITY_SERVICE + " * " +
+                TABLE_NAME_SERVICE + "." + COLUMN_PRICE_SERVICE + ") + " +
+                TABLE_NAME_STADIUM + "." + COLUMN_PRICE_STADIUM + ") AS total_revenue " +
+                "FROM " + TABLE_NAME_BILL +
+                " INNER JOIN " + TABLE_NAME_STADIUM +
+                " ON " + TABLE_NAME_BILL + "." + COLUMN_ID_STADIUM_BILL + " = " + TABLE_NAME_STADIUM + "." + COLUMN_ID_STADIUM +
+                " INNER JOIN " + TABLE_NAME_BILL_DETAIL +
+                " ON " + TABLE_NAME_BILL + "." + COLUMN_ID_BILL + " = " + TABLE_NAME_BILL_DETAIL + "." + COLUMN_ID_BILL_DETAIL +
+                " INNER JOIN " + TABLE_NAME_SERVICE +
+                " ON " + TABLE_NAME_BILL_DETAIL + "." + COLUMN_ID_BILL_DETAIL_SERVICE + " = " + TABLE_NAME_SERVICE + "." + COLUMN_ID_SERVICE +
+                " WHERE " + TABLE_NAME_BILL + "." + COLUMN_CHECK + " = 1";
+        Cursor cs = db.rawQuery(Query, null);
+        if (cs.moveToFirst()) {
+            do {
+                total = cs.getInt(0);
+            } while (cs.moveToNext());
+        }
+        return total;
     }
     public ArrayList<List_Bill_Items> getnoBillsPayment() {
         ArrayList<List_Bill_Items> billList = new ArrayList<>();
@@ -698,10 +726,8 @@ public class Data_Stadium extends SQLiteOpenHelper {
     public ArrayList<PieEntry> getServiceDetails(String time1, String time2) {
         ArrayList<PieEntry> pieEntries = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-
         SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-
         try {
             Date date1 = inputFormat.parse(time1);
             Date date2 = inputFormat.parse(time2);
@@ -731,7 +757,6 @@ public class Data_Stadium extends SQLiteOpenHelper {
                 " WHERE " + TABLE_NAME_BILL + "." + COLUMN_DATE_BILL + " BETWEEN '" + time1 + "' AND '" + time2 + "' " +  // Thêm dấu nháy đơn quanh ngày
                 " GROUP BY " + TABLE_NAME_SERVICE + "." + COLUMN_NAME_SERVICE + ", " + TABLE_NAME_BILL_DETAIL + "." + COLUMN_ID_BILL_DETAIL_SERVICE +
                 " HAVING " + TABLE_NAME_BILL + "." + COLUMN_CHECK + " = 1";
-
         Cursor cursor = db.rawQuery(q, null);
         if (cursor.moveToFirst()) {
             do {
@@ -766,7 +791,7 @@ public class Data_Stadium extends SQLiteOpenHelper {
         db.close();
         return phone;
     }
-
+    //tim ho tao bang init
 //    public void updateAllUserCheckColumn() {
 //        SQLiteDatabase db = this.getWritableDatabase();
 //
@@ -818,6 +843,71 @@ public class Data_Stadium extends SQLiteOpenHelper {
         Cursor cs = db.rawQuery(q, null);
         if (cs.moveToFirst())  return cs.getInt(0);
         return 0;
+    }
+
+    public String getName(String email){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String q = "SELECT " + COLUMN_NAME_USER + " FROM " + TABLE_NAME_USER + " WHERE " + COLUMN_EMAIL_USER + " = '" + email + "'";
+        Cursor cs = db.rawQuery(q, null);
+        if (cs.moveToFirst())  return cs.getString(0);
+        return null;
+    }
+
+    public boolean checkPassword(String email, String pass){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String q = "SELECT " + COLUMN_PASSWORD_USER + " FROM " + TABLE_NAME_USER + " WHERE " + COLUMN_EMAIL_USER + " = " + "'" + email + "' " + "AND " + COLUMN_CHECK_USER + " = " + 1;;
+        Cursor cs = db.rawQuery(q, null);
+        boolean result = false;
+        if (cs.moveToFirst()) {
+            String storedPassword = cs.getString(0); // Lấy mật khẩu từ CSDL
+            if (storedPassword.equals(pass)) { // So sánh với mật khẩu đã nhập
+                result = true;
+                Log.d("aaa", "checkPassword: true");
+            } else {
+                Log.d("aaa", "checkPassword: incorrect password");
+            }
+        } else {
+            Log.d("aaa", "checkPassword: user not found or inactive");
+        }
+
+        cs.close(); // Đóng Cursor
+        db.close(); // Đóng Database
+        return result;
+    }
+    public void updateName(String email, String name){
+        SQLiteDatabase db = this.getReadableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COLUMN_NAME_USER, name);
+        db.update(TABLE_NAME_USER, cv, COLUMN_EMAIL_USER + " = " + "'" + email + "'", null);
+    }
+
+    public void updateEmail(String oldEmail, String newEmail) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COLUMN_EMAIL_USER, newEmail);
+        db.update(TABLE_NAME_USER, cv, COLUMN_EMAIL_USER + " = ?", new String[]{oldEmail});
+        db.close();
+    }
+
+    public void updatePhone(String email, String phone) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COLUMN_PHONE_NUMBER_USER, phone);
+        db.update(TABLE_NAME_USER, cv, COLUMN_EMAIL_USER + " = " + "'" + email + "'", null);
+    }
+    public String getPhone(String email){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String q = "SELECT " + COLUMN_PHONE_NUMBER_USER + " FROM " + TABLE_NAME_USER + " WHERE " + COLUMN_EMAIL_USER + " = '" + email + "'";
+        Cursor cs = db.rawQuery(q, null);
+        if (cs.moveToFirst())  return cs.getString(0);
+        return null;
+    }
+
+    public void updatePassword(String email, String passnew){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COLUMN_PASSWORD_USER, passnew);
+        db.update(TABLE_NAME_USER, cv, COLUMN_EMAIL_USER + " = " + "'" + email + "'", null);
     }
 
 }

@@ -5,21 +5,21 @@
         android:id="@+id/home"
         android:title="Home"
         android:icon="@drawable/baseline_home_24"/>
-
     <item
-        android:id="@+id/chart"
-        android:title="Chart"
-        android:icon="@drawable/line_chart"
-        />
+        android:id="@+id/stadium"
+        android:title="Stadium"
+        android:icon="@drawable/stadium"/>
+    <item
+        android:id="@+id/put_stadium"
+        android:title="Put Stadium"
+        android:icon="@drawable/put_stadium"/>
     <item
         android:id="@+id/bill"
         android:title="Bill"
         android:icon="@drawable/bill_svg" />
     <item
-        android:id="@+id/Exit"
-        android:title="Exit"
-        android:icon="@drawable/baseline_exit_to_app_24" />
-    <item
-        android:title=""
-        android:enabled="false"/>
+        android:id="@+id/chart"
+        android:title="Chart"
+        android:icon="@drawable/line_chart"
+        />
 </menu>
